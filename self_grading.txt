@@ -1,0 +1,76 @@
+
+            COP5570 Project No.4 Self Grading Sheet
+
+
+Name:                               FSU login:
+
+----------------------------------------------------------------------------
+
+README/Makefile/Demo (10)
+                                 _____                 ________
+
+
+Demo (5)
+                                 _____                 ________
+
+
+Pthread program
+
+   Correctness (10)
+
+                                 _____                 ________
+
+   Efficiency (10)
+
+                                 _____                 ________
+
+   Master-worker (10)
+
+                                 _____                 ________
+
+OpenMP program
+
+   Correctness (10)
+
+                                 _____                 ________
+
+   Efficiency (10)
+
+                                 _____                 ________
+
+
+MPI program
+
+   Correctness (10)
+
+                                 _____                 ________
+
+   Efficiency (10)
+
+                                 _____                 ________
+
+   O(wordsize/P) memory (15)
+
+                                 _____                 ________
+
+   20.1 speedup (extra 5)
+
+                                 _____                 ________
+
+
+compiler warning (-3 each)
+
+                                 _____                 ________
+
+
+First Unknown Error (-15)
+                                                       ________
+
+
+First unimplemented Feature (-8)
+                                                       ________
+
+
+Final Grade
+
+                                                       ________
