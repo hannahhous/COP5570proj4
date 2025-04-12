@@ -1,21 +1,11 @@
 /*
- * Created by Dr. Xin Yuan for the COP5570 class
- *
- * To compile to test performance:
- *    gcc -O3 -DNOOUTPUTFILE proj4_seq.c
- *
- * To compile to test correctness (the program will output
- *    file final_world000.txt for comparison:
- *    gcc proj4_seq.c
- *
+ * OpenMP implementation for the Game of Life
+ * Based on the sequential version by Dr. Xin Yuan
  */
-
-
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
+// We'll use OpenMP directives without explicitly including omp.h
 
 #ifdef NOOUTPUTFILE
 #define NOOUTPUTFILE 1
@@ -34,6 +24,7 @@ char neww[MAX_N][MAX_N];
 
 int w_X, w_Y;
 
+// Keep all the initialization and utility functions the same as sequential version
 void init(int X, int Y)
 {
   int i, j;
@@ -80,12 +71,12 @@ int neighborcount(int x, int y)
 
   if ((x<0) || (x >=w_X)) {
     printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x,y,
-	   w_X, w_Y);
+           w_X, w_Y);
     exit(0);
   }
   if ((y<0) || (y >=w_Y)) {
     printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x,y,
-	   w_X, w_Y);
+           w_X, w_Y);
     exit(0);
   }
 
@@ -149,26 +140,31 @@ int main(int argc, char *argv[])
   if (DEBUG_LEVEL > 10) print_world();
 
   for (iter = 0; (iter < 200) && (count <50*init_count) &&
-	 (count > init_count / 50); iter ++) {
+     (count > init_count / 50); iter ++) {
 
+    // Add OpenMP directive for the first nested loop
+    #pragma omp parallel for private(y, c)
     for (x=0; x < w_X; x++) {
       for (y=0; y<w_Y; y++) {
         c = neighborcount(x, y);  /* count neighbors */
         if (c <= 1) neww[y][x] = 0;      /* die of loneliness */
         else if (c >=4) neww[y][x] = 0;  /* die of overpopulation */
         else if (c == 3)  neww[y][x] = 1;             /* becomes alive */
-	else neww[y][x] = w[y][x];   /* c == 2, no change */
+        else neww[y][x] = w[y][x];   /* c == 2, no change */
       }
     }
 
     /* copy the world, and count the current lives */
     count = 0;
+    // Add OpenMP directive for the second nested loop with reduction
+    #pragma omp parallel for private(y) reduction(+:count)
     for (x=0; x<w_X; x++) {
       for (y=0; y<w_Y; y++) {
-	w[y][x] = neww[y][x];
-	if (w[y][x] == 1) count++;
+        w[y][x] = neww[y][x];
+        if (w[y][x] == 1) count++;
       }
     }
+
     printf("iter = %d, population count = %d\n", iter, count);
     if (DEBUG_LEVEL > 10) print_world();
   }
@@ -178,10 +174,10 @@ int main(int argc, char *argv[])
     FILE *fd;
     if ((fd = fopen("final_world000.txt", "w")) != NULL) {
       for (x=0; x<w_X; x++) {
-	for (y=0; y<w_Y; y++) {
+        for (y=0; y<w_Y; y++) {
           fprintf(fd, "%d", (int)w[y][x]);
-	}
-	fprintf(fd, "\n");
+        }
+        fprintf(fd, "\n");
       }
     } else {
       printf("Can't open file final_world000.txt\n");
