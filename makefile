@@ -25,7 +25,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 # Common flags
-CFLAGS = -Wall -ansi -pedantic -O3 -DNOOUTPUTFILE
+CFLAGS = -O3 -DNOOUTPUTFILE
 
 # OpenMP flags (only apply to gcc)
 ifneq ($(findstring gcc,$(CC)),)
@@ -44,7 +44,7 @@ MPI_FLAGS =
 
 # Targets
 #all: sequential omp pthread mpi
-all: sequential omp
+all: sequential omp pthread
 
 
 sequential: sequential.c
