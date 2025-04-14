@@ -43,8 +43,7 @@ MPICC = mpicc
 MPI_FLAGS =
 
 # Targets
-#all: sequential omp pthread mpi
-all: sequential omp pthread
+all: sequential omp pthread mpi
 
 
 sequential: sequential.c
