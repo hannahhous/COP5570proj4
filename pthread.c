@@ -63,7 +63,8 @@ int total_tasks_created = 0;
 
 // Flags to control thread execution
 int threads_running = 1;  // Set to 0 to terminate threads
-int iteration_complete = 0; // Set to 1 when all tasks for an iteration are done
+int iteration_complete = 0; // Set to 1 when all tasks for an iteration
+are done
 
 // Synchronization primitives
 pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -119,12 +120,14 @@ int neighborcount(int x, int y)
     int count = 0;
 
     if ((x<0) || (x >=w_X)) {
-        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x,y,
+        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n",
+x,y,
            w_X, w_Y);
         exit(0);
     }
     if ((y<0) || (y >=w_Y)) {
-        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x,y,
+        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n",
+x,y,
            w_X, w_Y);
         exit(0);
     }
@@ -135,7 +138,8 @@ int neighborcount(int x, int y)
         } else if (y == w_Y-1) {
             count = w[y][x+1] + w[y-1][x] + w[y-1][x+1];
         } else {
-            count = w[y-1][x] + w[y+1][x] + w[y-1][x+1] + w[y][x+1] + w[y+1][x+1];
+            count = w[y-1][x] + w[y+1][x] + w[y-1][x+1] + w[y][x+1] +
+w[y+1][x+1];
         }
     } else if (x == w_X -1) {
         if (y == 0) {
@@ -143,17 +147,21 @@ int neighborcount(int x, int y)
         } else if (y == w_Y-1) {
             count = w[y][x-1] + w[y-1][x] + w[y-1][x-1];
         } else {
-            count = w[y-1][x] + w[y+1][x] + w[y-1][x-1] + w[y][x-1] + w[y+1][x-1];
+            count = w[y-1][x] + w[y+1][x] + w[y-1][x-1] + w[y][x-1] +
+w[y+1][x-1];
         }
     } else {
 // x is in the middle
 
         if (y == 0) {
-            count = w[y][x-1] + w[y][x+1] + w[y+1][x-1] + w[y+1][x] + w[y+1][x+1];
+            count = w[y][x-1] + w[y][x+1] + w[y+1][x-1] + w[y+1][x] +
+w[y+1][x+1];
         } else if (y == w_Y-1) {
-            count = w[y][x-1] + w[y][x+1] + w[y-1][x-1] + w[y-1][x] + w[y-1][x+1];
+            count = w[y][x-1] + w[y][x+1] + w[y-1][x-1] + w[y-1][x] +
+w[y-1][x+1];
         } else {
-            count = w[y-1][x-1] + w[y][x-1] + w[y+1][x-1] + w[y-1][x] + w[y+1][x]
+            count = w[y-1][x-1] + w[y][x-1] + w[y+1][x-1] + w[y-1][x] +
+w[y+1][x]
                   + w[y-1][x+1] + w[y][x+1] + w[y+1][x+1];
         }
     }
@@ -168,9 +176,11 @@ void create_tasks(int iteration) {
     next_task = 0;
 
     // Calculate chunk size with progressive reduction
-    // Start with larger tasks in early iterations and reduce size over time
+    // Start with larger tasks in early iterations and reduce size over
+time
     int base_divisor = 4; // Start dividing the grid into 4x4 chunks
-    int divisor = base_divisor + (iteration / 5); // Reduce chunk size every 5 iterations
+    int divisor = base_divisor + (iteration / 5); // Reduce chunk size
+every 5 iterations
     if (divisor > 20) divisor = 20; // Cap at 20x20 grid division
 
     int chunk_size_y = (w_Y + divisor - 1) / divisor; // Ceiling division
@@ -181,7 +191,8 @@ void create_tasks(int iteration) {
     if (chunk_size_x < 2) chunk_size_x = 2;
 
     if (DEBUG_LEVEL > 0) {
-        printf("Iteration %d: Chunk size %dx%d (grid divided into %dx%d chunks)\n",
+        printf("Iteration %d: Chunk size %dx%d (grid divided into %dx%d
+chunks)\n",
                iteration, chunk_size_x, chunk_size_y, divisor, divisor);
     }
 
@@ -202,14 +213,16 @@ void create_tasks(int iteration) {
                 task_queue[task_count].task_id = total_tasks_created++;
                 task_count++;
             } else {
-                printf("Warning: Task queue full, some parts of the grid may not be processed\n");
+                printf("Warning: Task queue full, some parts of the grid
+may not be processed\n");
                 return;
             }
         }
     }
 
     if (DEBUG_LEVEL > 0) {
-        printf("Created %d tasks for iteration %d\n", task_count, iteration);
+        printf("Created %d tasks for iteration %d\n", task_count,
+iteration);
     }
 }
 
@@ -242,7 +255,8 @@ void update_world() {
     }
 }
 
-// Function to fetch a task from the queue (returns 1 if task available, 0 otherwise)
+// Function to fetch a task from the queue (returns 1 if task available, 0
+otherwise)
 int get_task(Task *task) {
     if (next_task >= task_count) {
         return 0;  // No more tasks
@@ -341,7 +355,8 @@ int main(int argc, char *argv[]) {
     init_count = c;
     count = init_count;
 
-    printf("Initial world, population count: %d, using %d threads\n", c, nthreads);
+    printf("Initial world, population count: %d, using %d threads\n", c,
+nthreads);
     if (DEBUG_LEVEL > 10) print_world();
 
     // Create worker threads
@@ -350,7 +365,8 @@ int main(int argc, char *argv[]) {
         thread_info[i].nthreads = nthreads;
         thread_info[i].active = 0;
 
-        if (pthread_create(&thread_info[i].thread, NULL, worker_thread, &thread_info[i]) != 0) {
+        if (pthread_create(&thread_info[i].thread, NULL, worker_thread,
+&thread_info[i]) != 0) {
             perror("Thread creation failed");
             exit(1);
         }
@@ -425,7 +441,8 @@ int main(int argc, char *argv[]) {
  * Reliable pthread implementation for the Game of Life
  *
  * To compile to test performance:
- *    gcc -O3 -pthread -DNOOUTPUTFILE proj4_pthread_reliable.c -o proj4_pthread_reliable
+ *    gcc -O3 -pthread -DNOOUTPUTFILE proj4_pthread_reliable.c -o
+proj4_pthread_reliable
  *
  * To compile to test correctness:
  *    gcc -pthread proj4_pthread_reliable.c -o proj4_pthread_reliable
@@ -435,6 +452,7 @@ int main(int argc, char *argv[]) {
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+#include <errno.h>
 
 #ifdef NOOUTPUTFILE
 #define NOOUTPUTFILE 1
@@ -528,13 +546,11 @@ int neighborcount(int x, int y) {
     int count = 0;
 
     if ((x < 0) || (x >= w_X)) {
-        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x, y,
-            w_X, w_Y);
+        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x, y,            w_X, w_Y);
         exit(0);
     }
     if ((y < 0) || (y >= w_Y)) {
-        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x, y,
-            w_X, w_Y);
+        printf("neighborcount: (%d %d) out of bound (0..%d, 0..%d).\n", x, y,            w_X, w_Y);
         exit(0);
     }
 
@@ -560,8 +576,7 @@ int neighborcount(int x, int y) {
         } else if (y == w_Y-1) {
             count = w[y][x-1] + w[y][x+1] + w[y-1][x-1] + w[y-1][x] + w[y-1][x+1];
         } else {
-            count = w[y-1][x-1] + w[y][x-1] + w[y+1][x-1] + w[y-1][x] + w[y+1][x]
-                   + w[y-1][x+1] + w[y][x+1] + w[y+1][x+1];
+            count = w[y-1][x-1] + w[y][x-1] + w[y+1][x-1] + w[y-1][x] + w[y+1][x]                   + w[y-1][x+1] + w[y][x+1] + w[y+1][x+1];
         }
     }
 
@@ -737,11 +752,17 @@ int main(int argc, char *argv[]) {
         threads_completed = 0;
         current_iteration = iter + 1;  // 1-based iteration count to avoid conflict with 0
         pthread_cond_broadcast(&cond_start_iteration);
-
+struct timespec timeout;
+clock_gettime(CLOCK_REALTIME, &timeout);
+timeout.tv_sec += 30; // 30-second timeout
         // Wait for all threads to complete
         while (threads_completed < nthreads) {
-            pthread_cond_wait(&cond_iteration_done, &mutex);
-        }
+            int wait_result = pthread_cond_wait(&cond_iteration_done, &mutex);
+    if (wait_result == ETIMEDOUT) {
+        printf("Warning: Timeout waiting for threads to complete iteration %d\n", iter);
+        break; // Continue with whatever threads have finished
+    }
+}
         pthread_mutex_unlock(&mutex);
 
         // Copy new world to current world and count population
