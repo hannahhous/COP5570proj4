@@ -25,7 +25,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 # Common flags
-CFLAGS = -O3 -DNOOUTPUTFILE
+CFLAGS = -O3
 
 # OpenMP flags (only apply to gcc)
 ifneq ($(findstring gcc,$(CC)),)
