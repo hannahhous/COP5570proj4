@@ -1,11 +1,5 @@
-/*
- * OpenMP implementation for the Game of Life
- * Based on the sequential version by Dr. Xin Yuan
- */
-
 #include <stdio.h>
 #include <stdlib.h>
-// We'll use OpenMP directives without explicitly including omp.h
 
 #ifdef NOOUTPUTFILE
 #define NOOUTPUTFILE 1
@@ -24,7 +18,7 @@ char neww[MAX_N][MAX_N];
 
 int w_X, w_Y;
 
-// Keep all the initialization and utility functions the same as sequential version
+/* Same initialization and utility functions as in the sequential code */
 void init(int X, int Y)
 {
   int i, j;
@@ -110,6 +104,7 @@ int neighborcount(int x, int y)
   return count;
 }
 
+/* Same start to main code*/
 int main(int argc, char *argv[])
 {
   int x, y;
@@ -142,7 +137,7 @@ int main(int argc, char *argv[])
   for (iter = 0; (iter < 200) && (count <50*init_count) &&
      (count > init_count / 50); iter ++) {
 
-    // Add OpenMP directive for the first nested loop
+    /* OpenMP directive for the first nested loop */
     #pragma omp parallel for private(y, c)
     for (x=0; x < w_X; x++) {
       for (y=0; y<w_Y; y++) {
@@ -156,7 +151,7 @@ int main(int argc, char *argv[])
 
     /* copy the world, and count the current lives */
     count = 0;
-    // Add OpenMP directive for the second nested loop with reduction
+    /* OpenMP directive for the second nested loop with reduction */
     #pragma omp parallel for private(y) reduction(+:count)
     for (x=0; x<w_X; x++) {
       for (y=0; y<w_Y; y++) {
