@@ -200,6 +200,7 @@ int main(int argc, char *argv[])
         int req_count = 0;
 
         /* Exchange rows */
+        /* I used AI here a little bit in the beginning to help me understand this process */
         if (rank > 0) {
             /* Receive top row from previous process */
             MPI_Irecv(&w[0][0], w_X, MPI_CHAR, rank - 1, 0,
@@ -300,10 +301,9 @@ int main(int argc, char *argv[])
             printf("Error: Failed to allocate memory for local data on process %d\n", rank);
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
+        /* I used previous notes from other classes for this */
         for (int y = 0; y < local_w_Y; y++) {
-            for (int x = 0; x < w_X; x++) {
-                local_data[y * w_X + x] = w[y + 1][x];
-            }
+            memcpy(&local_data[y * w_X], &w[y + 1][0], w_X * sizeof(char));
         }
 
         /* Gather data to rank 0 */

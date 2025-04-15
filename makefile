@@ -1,10 +1,8 @@
-# Common Flags
+# Flags
 CFLAGS = -O3
 
 # Targets
-# !!! real line
-# all: sequential omp pthread mpi
-all: sequential pthread mpi
+all: sequential omp pthread mpi
 
 sequential: sequential.c
 	gcc $(CFLAGS) sequential.c -o sequential

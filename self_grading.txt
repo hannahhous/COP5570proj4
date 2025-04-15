@@ -7,70 +7,72 @@ Name:                               FSU login:
 ----------------------------------------------------------------------------
 
 README/Makefile/Demo (10)
-                                 _____                 ________
+                                 __10___                 ________
 
 
 Demo (5)
-                                 _____                 ________
+                                 __5___                 ________
 
 
 Pthread program
 
    Correctness (10)
 
-                                 _____                 ________
+                                 __10___                 ________
 
    Efficiency (10)
 
-                                 _____                 ________
+                                 __10___                 ________
 
    Master-worker (10)
 
-                                 _____                 ________
+                                 __10___                 ________
+   13.1 speedup (extra 5)
+
+                                 __5___                 ________
 
 OpenMP program
 
    Correctness (10)
 
-                                 _____                 ________
+                                 __10___                 ________
 
    Efficiency (10)
 
-                                 _____                 ________
-
+                                 __10___                 ________
 
 MPI program
 
    Correctness (10)
 
-                                 _____                 ________
+                                 __10___                 ________
 
    Efficiency (10)
 
-                                 _____                 ________
+                                 __10___                 ________
 
    O(wordsize/P) memory (15)
 
-                                 _____                 ________
+                                 __15___                 ________
 
-   20.1 speedup (extra 5)
+   13.1 speedup (extra 5)
 
-                                 _____                 ________
+                                 __0___                 ________
 
 
 compiler warning (-3 each)
 
-                                 _____                 ________
+                                 __0___                 ________
 
 
 First Unknown Error (-15)
-                                                       ________
+                                    0                   ________
 
 
 First unimplemented Feature (-8)
-                                                       ________
+                                   0                    ________
 
 
 Final Grade
 
-                                                       ________
+                                    105                   ________
